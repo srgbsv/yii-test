@@ -1,0 +1,23 @@
+<?php
+
+use yii\helpers\Html;
+
+
+/* @var $this yii\web\View */
+/* @var $model app\models\EventHandler */
+
+$this->title = 'Добавить обработчик событий';
+$this->params['breadcrumbs'][] = ['label' => 'Обработчик событий', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="event-handler-create">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <?= $this->render('_form', [
+        'model' => $model,
+        'events' => $events,
+        'transport' => $transport
+    ]) ?>
+
+</div>

@@ -8,6 +8,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\models\User;
 
 AppAsset::register($this);
 ?>
@@ -27,7 +28,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => 'Тестовое задание',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -36,21 +37,25 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post', ['class' => 'navbar-form'])
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link']
-                )
-                . Html::endForm()
-                . '</li>'
+            ['label' => 'Главная', 'url' => ['/site/index']],
+            ['label' => 'Уведомления', 'url' => ['/notification']],
+            Yii::$app->user->identity->role == User::ROLE_ADMIN ? (
+                ['label' => 'Администрирование', 'url' => ['/site/login'],
+                    'items' => [
+                        ['label' => 'Статьи', 'url' => ['/article']],
+                        ['label' => 'Обработчики событий', 'url' => ['/event-handler']],
+                        ['label' => 'Пользователи', 'url' => ['user']]
+                    ],
+                ]
+            ) : (''),
+            '<li>'
+            . Html::beginForm(['/site/logout'], 'post', ['class' => 'navbar-form'])
+            . Html::submitButton(
+                'Logout (' . Yii::$app->user->identity->name . ')',
+                ['class' => 'btn btn-link']
             )
+            . Html::endForm()
+            . '</li>'
         ],
     ]);
     NavBar::end();

@@ -2,8 +2,8 @@
 
 namespace app\models;
 
-namespace common\models;
-
+use app\components\Eventable\EventableInterface;
+use app\components\Transport\RecipientInterface;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -14,7 +14,7 @@ use yii\web\IdentityInterface;
  * User model
  *
  * @property integer $id
- * @property string $username
+ * @property string $name
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
@@ -25,11 +25,45 @@ use yii\web\IdentityInterface;
  * @property integer $updated_at
  * @property string $password write-only password
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends ActiveRecord
+    implements IdentityInterface, EventableInterface, RecipientInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
     const ROLE_USER = 10;
+    const ROLE_ADMIN = 30;
+
+    public static $EVENTS = [
+        'CREATE' => 'create',
+        'BAN' => 'BAN'
+    ];
+
+    public static function getEvents() {
+        return self::$EVENTS;
+    }
+
+    public static function getRecipientList() {
+        return [
+            'same'
+        ];
+    }
+
+    public function getRecipient($name) {
+        switch($name) {
+            case 'same':
+            default:
+                return $this;
+        }
+    }
+
+    public function getDst($name) {
+        switch($name) {
+            case 'email':
+                return $this->email;
+            case 'web':
+                return $this->id;
+        }
+    }
 
     /**
      * @inheritdoc
@@ -92,7 +126,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['name' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
