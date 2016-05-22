@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\models\User;
+use app\models\Chunk;
 use app\components\Transport\Transport;
 use Yii;
 use yii\twig;
@@ -77,6 +78,7 @@ class EventHandler extends \yii\db\ActiveRecord
                 }
             }
         }
+        $params_array['chunks'] = Chunk::getChunks();
         $loader = new \Twig_Loader_Filesystem('/');
         $twig = new \Twig_Environment($loader);
         $twig->addExtension(new Extension());
@@ -89,7 +91,14 @@ class EventHandler extends \yii\db\ActiveRecord
         } else if (is_numeric($recipient)) {
             $recipients[] = User::findOne($recipient);
         } else {
-            $recipients[] = User::findOne($event->sender->$recipient);
+            $recipient_tmp = User::findOne($event->sender->getRecipient('same'));
+            if (is_array($recipient_tmp)) {
+                foreach($recipient_tmp as $row) {
+                    $recipients[] = $row;
+                }
+            } else {
+                $recipients[] = $recipient_tmp;
+            }
         }
         $transport = new Transport($this->transport);
         $transport->send($recipients, $this->title, $msg);

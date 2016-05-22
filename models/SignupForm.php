@@ -46,12 +46,29 @@ class SignupForm extends Model
             $user = new User();
             $user->name = $this->name;
             $user->email = $this->email;
+            $user->status = User::STATUS_ACTIVE;
+            $user->role = User::ROLE_USER;
             $user->setPassword($this->password);
             $user->generateAuthKey();
             $user->save();
+            $user->trigger(User::$EVENTS['CREATE']);
             return $user;
         }
 
         return null;
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'name' => 'Логин',
+            'email' => 'E-mail',
+            'password' => 'Пароль'
+        ];
     }
 }

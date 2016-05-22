@@ -28,9 +28,7 @@ class SiteController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => [
-                            User::ROLE_ADMIN,
-                        ],
+                        'roles' => ['@'],
                     ],
                 ],
             ]

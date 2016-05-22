@@ -3,18 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Notification;
-use app\components\AccessRule;
-use yii\filters\AccessControl;
+use app\models\Chunk;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * NotificationController implements the CRUD actions for Notification model.
+ * ChunkController implements the CRUD actions for Chunk model.
  */
-class NotificationController extends Controller
+class ChunkController extends Controller
 {
     /**
      * @inheritdoc
@@ -22,34 +20,23 @@ class NotificationController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                // We will override the default rule config with the new AccessRule class
-                'ruleConfig' => [
-                    'class' => AccessRule::className(),
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
                 ],
-                'only' => ['index', 'read'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ]
+            ],
         ];
     }
 
     /**
-     * Lists all Notification models.
+     * Lists all Chunk models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Notification::find()->where(['user_id' => Yii::$app->user->id])->orderBy('date DESC'),
-            'pagination' => [
-                'pageSize' => 10,
-            ],
+            'query' => Chunk::find(),
         ]);
 
         return $this->render('index', [
@@ -58,8 +45,8 @@ class NotificationController extends Controller
     }
 
     /**
-     * Displays a single Notification model.
-     * @param integer $id
+     * Displays a single Chunk model.
+     * @param string $id
      * @return mixed
      */
     public function actionView($id)
@@ -70,27 +57,16 @@ class NotificationController extends Controller
     }
 
     /**
-     * Displays a single Notification model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionRead($id)
-    {
-        $model = Notification::findOne($id);
-        $model->read();
-    }
-
-    /**
-     * Creates a new Notification model.
+     * Creates a new Chunk model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Notification();
+        $model = new Chunk();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->name]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -99,9 +75,9 @@ class NotificationController extends Controller
     }
 
     /**
-     * Updates an existing Notification model.
+     * Updates an existing Chunk model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionUpdate($id)
@@ -109,7 +85,7 @@ class NotificationController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->name]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -118,9 +94,9 @@ class NotificationController extends Controller
     }
 
     /**
-     * Deletes an existing Notification model.
+     * Deletes an existing Chunk model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionDelete($id)
@@ -131,15 +107,15 @@ class NotificationController extends Controller
     }
 
     /**
-     * Finds the Notification model based on its primary key value.
+     * Finds the Chunk model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Notification the loaded model
+     * @param string $id
+     * @return Chunk the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Notification::findOne($id)) !== null) {
+        if (($model = Chunk::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -3,18 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Notification;
-use app\components\AccessRule;
-use yii\filters\AccessControl;
+use app\models\User;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * NotificationController implements the CRUD actions for Notification model.
+ * UserController implements the CRUD actions for User model.
  */
-class NotificationController extends Controller
+class UserController extends Controller
 {
     /**
      * @inheritdoc
@@ -22,34 +20,23 @@ class NotificationController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                // We will override the default rule config with the new AccessRule class
-                'ruleConfig' => [
-                    'class' => AccessRule::className(),
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
                 ],
-                'only' => ['index', 'read'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ]
+            ],
         ];
     }
 
     /**
-     * Lists all Notification models.
+     * Lists all User models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Notification::find()->where(['user_id' => Yii::$app->user->id])->orderBy('date DESC'),
-            'pagination' => [
-                'pageSize' => 10,
-            ],
+            'query' => User::find(),
         ]);
 
         return $this->render('index', [
@@ -58,7 +45,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Displays a single Notification model.
+     * Displays a single User model.
      * @param integer $id
      * @return mixed
      */
@@ -70,26 +57,16 @@ class NotificationController extends Controller
     }
 
     /**
-     * Displays a single Notification model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionRead($id)
-    {
-        $model = Notification::findOne($id);
-        $model->read();
-    }
-
-    /**
-     * Creates a new Notification model.
+     * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Notification();
+        $model = new User();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->trigger(User::$EVENTS['CREATE']);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -99,7 +76,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Updates an existing Notification model.
+     * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -118,7 +95,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Deletes an existing Notification model.
+     * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -131,18 +108,23 @@ class NotificationController extends Controller
     }
 
     /**
-     * Finds the Notification model based on its primary key value.
+     * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Notification the loaded model
+     * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Notification::findOne($id)) !== null) {
+        if (($model = User::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionBlock($id) {
+        \Yii::info("UID: ".$id);
+        $this->findModel($id)->setBlock();
     }
 }

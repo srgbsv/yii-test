@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\components\Eventable\EventableInterface;
+use app\components\Eventable\EventableTrait;
 use app\components\Transport\RecipientInterface;
 use Yii;
 use yii\base\NotSupportedException;
@@ -28,14 +29,16 @@ use yii\web\IdentityInterface;
 class User extends ActiveRecord
     implements IdentityInterface, EventableInterface, RecipientInterface
 {
-    const STATUS_DELETED = 0;
+    use EventableTrait;
+
+    const STATUS_BLOCK = 0;
     const STATUS_ACTIVE = 10;
     const ROLE_USER = 10;
     const ROLE_ADMIN = 30;
 
     public static $EVENTS = [
         'CREATE' => 'create',
-        'BAN' => 'BAN'
+        'BLOCK' => 'block'
     ];
 
     public static function getEvents() {
@@ -83,6 +86,7 @@ class User extends ActiveRecord
         ];
     }
 
+
     /**
      * @inheritdoc
      */
@@ -95,7 +99,7 @@ class User extends ActiveRecord
             [['name', 'new_password'], 'string'],
 
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_BLOCK]],
 
             ['role', 'default', 'value' => self::ROLE_USER],
             ['role', 'in', 'range' => [self::ROLE_USER]],
@@ -238,5 +242,11 @@ class User extends ActiveRecord
         if (strlen($newPassword) !== 0) {
             $this->setPassword($newPassword);
         }
+    }
+
+    public function setBlock() {
+        $this->status = User::STATUS_BLOCK;
+        $this->save();
+        $this->trigger(User::$EVENTS['BLOCK']);
     }
 }

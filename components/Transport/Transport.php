@@ -21,9 +21,10 @@ class Transport extends Component {
 	public function __construct($transport_name = 'web') {
 		$this->transport = null;
 		if ($transport_name != 'web') {
-			$transport = __NAMESPACE__ . $transport_name . 'Transport';
-			if (class_exists($transport) && in_array("app\\components\\TransportableInterface", class_implements($transport))) {
-				$this->transport = $transport;
+			$transport = __NAMESPACE__ ."\\". ucfirst($transport_name) . 'Transport';
+			if (class_exists($transport) && in_array("app\\components\\Transport\\TransportableInterface", class_implements($transport))) {
+				$this->transport = new $transport;
+				$this->transport_name = $transport_name;
 			} else {
 				$this->transport_name = $transport_name;
 				$this->transport = new WebTransport();

@@ -23,19 +23,19 @@ $config = [
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-             'viewPath' => '@common/mail',
-                // send all mails to a file by default. You have to set
-                // 'useFileTransport' to false and configure a transport
-                // for the mailer to send real emails.
-             'useFileTransport' => false,
-             'transport' => [
+            'viewPath' => 'app/mail',
+            // send all mails to a file by default. You have to set
+            // 'useFileTransport' to false and configure a transport
+            // for the mailer to send real emails.
+            'useFileTransport' => false,
+            'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.yandex.com',
                 'username' => 'mail@rbnn.ru',
-                'password' => 'D6vOM4pZcF',
+                'password' => 'qJ1IyOZz6U',
                 'port' => '587',
-                'encryption' => 'tls',
-                ],
+                'encryption' => 'tls'
+            ],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

@@ -8,7 +8,7 @@ $(document).ready(function() {
            var model = $("#eventhandler-event_model :selected").text();
            $.ajax({
                type: "GET",
-               url: "?r=event-handler/get-events&model="+model,
+               url: "/event-handler/get-events?model="+model,
                success: function(data) {
                    var sel = $('#eventhandler-event_name');
                    sel.html("");
@@ -54,7 +54,7 @@ $(document).ready(function() {
                 var model = $("#eventhandler-event_model :selected").text();
                 $.ajax({
                     type: "GET",
-                    url: "?r=event-handler/get-model-attributes&model=" + model,
+                    url: "/get-model-attributes?model=" + model,
                     success: function (data) {
                         h.append("<select name='param-"+param_name+"'></select>");
                         var sel = h.find('select');
@@ -85,7 +85,7 @@ $(document).ready(function() {
                 $(".field-eventhandler-recipient").show();
                 $.ajax({
                     type: "GET",
-                    url: "?r=event-handler/get-users",
+                    url: "/event-handler/get-users",
                     success: function(data) {
                         sel.html("");
                         $.each(data, function(i, v) {
@@ -100,7 +100,7 @@ $(document).ready(function() {
                 $(".field-eventhandler-recipient").show();
                 $.ajax({
                     type: "GET",
-                    url: "?r=event-handler/get-recipients&model="+model,
+                    url: "/event-handler/get-recipients?model="+model,
                     success: function(data) {
                         var sel = $('#eventhandler-recipient');
                         sel.html("");
@@ -118,6 +118,14 @@ $(document).ready(function() {
         $.get(href);
         $(this).parent().parent().removeClass('alert-info').addClass('alert-success');
         $(this).remove();
+        return false;
+    });
+
+    $('.user-block').click(function () {
+        var href = $(this).attr('href');
+        $.get(href, function() {
+           location.reload();
+        });
         return false;
     });
 

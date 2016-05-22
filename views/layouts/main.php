@@ -39,15 +39,19 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Главная', 'url' => ['/site/index']],
             ['label' => 'Уведомления', 'url' => ['/notification']],
-            Yii::$app->user->identity->role == User::ROLE_ADMIN ? (
+            !Yii::$app->user->getIsGuest() && Yii::$app->user->identity->role == User::ROLE_ADMIN ? (
                 ['label' => 'Администрирование', 'url' => ['/site/login'],
                     'items' => [
                         ['label' => 'Статьи', 'url' => ['/article']],
                         ['label' => 'Обработчики событий', 'url' => ['/event-handler']],
-                        ['label' => 'Пользователи', 'url' => ['user']]
+                        ['label' => 'Пользователи', 'url' => ['/user']],
+                        ['label' => 'Чанки', 'url' => ['/chunk']],
                     ],
                 ]
             ) : (''),
+            Yii::$app->user->getIsGuest() ? (
+                ['label' => 'Войти', 'url' => ['site/login']]
+            ) : (
             '<li>'
             . Html::beginForm(['/site/logout'], 'post', ['class' => 'navbar-form'])
             . Html::submitButton(
@@ -55,7 +59,7 @@ AppAsset::register($this);
                 ['class' => 'btn btn-link']
             )
             . Html::endForm()
-            . '</li>'
+            . '</li>')
         ],
     ]);
     NavBar::end();
