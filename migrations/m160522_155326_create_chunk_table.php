@@ -13,7 +13,7 @@ class m160522_155326_create_chunk_table extends Migration
     public function up()
     {
         $this->createTable('chunk', [
-            'name' => $this->string(45)->unique(),
+            'name' => $this->string(45),
             'value' => $this->text()
         ]);
 

@@ -2,6 +2,13 @@
 
 namespace app\controllers;
 
+/**
+ * Класс чанков - глобальный переменных для сайта
+ *
+ * @author Sergey Bosov <srg.bsv@gmail.com>
+ *
+ */
+
 use Yii;
 use app\models\Chunk;
 use yii\data\ActiveDataProvider;

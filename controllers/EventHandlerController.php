@@ -32,7 +32,6 @@ class EventHandlerController extends Controller
                 'ruleConfig' => [
                     'class' => AccessRule::className(),
                 ],
-                'only' => ['create', 'update', 'delete'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -45,6 +44,10 @@ class EventHandlerController extends Controller
         ];
     }
 
+    /**
+     * Получить события для модели
+     * @return json array
+     */
     public function actionGetEvents() {
         $model_name = Yii::$app->request->get('model');
         $namespace = 'app\models\\';
@@ -56,6 +59,10 @@ class EventHandlerController extends Controller
         return $response;
     }
 
+    /**
+     * Получить получателей для модели
+     * @return json array
+     */
     public function actionGetRecipients() {
         $model_name = Yii::$app->request->get('model');
         $namespace = 'app\models\\';
@@ -66,6 +73,10 @@ class EventHandlerController extends Controller
         return $response;
     }
 
+    /**
+     * Получить список всех пользователей
+     * @return json array
+     */
     public function actionGetUsers() {
         $users = User::find()->all();
         $response = Yii::$app->response;
@@ -75,6 +86,10 @@ class EventHandlerController extends Controller
 
     }
 
+    /**
+     * Получить аттрибуты модели
+     * @return json array
+     */
     public function actionGetModelAttributes() {
         $model_name = Yii::$app->request->get('model');
         $namespace = 'app\models\\';
@@ -128,8 +143,7 @@ class EventHandlerController extends Controller
         $files = scandir($models_dir);
 
         $model_namespace = 'app\models\\';
-        foreach($files as $file) {
-            //skip current and parent folder entries and non-php files
+        foreach($files as $file) { //Поиск всех моделей, имплементирующих EventableInterface
             if ($file == '.' || $file == '..' || !preg_match('/\.php/', $file)) continue;
             $check_model = preg_replace('/\.php$/', '', $file);
             $impl = class_implements($model_namespace . $check_model);

@@ -31,8 +31,8 @@ $config = [
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.yandex.com',
-                'username' => 'mail@rbnn.ru',
-                'password' => 'qJ1IyOZz6U',
+                'username' => '',
+                'password' => '',
                 'port' => '587',
                 'encryption' => 'tls'
             ],

@@ -123,6 +123,11 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Функция смена статуса пользователя на "заблокировано".
+     *
+     * @param integer $id
+     */
     public function actionBlock($id) {
         \Yii::info("UID: ".$id);
         $this->findModel($id)->setBlock();

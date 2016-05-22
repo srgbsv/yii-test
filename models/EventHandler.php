@@ -66,6 +66,12 @@ class EventHandler extends \yii\db\ActiveRecord
         return $this->hasMany(Notification::className(), ['id' => 'notification_id']);
     }
 
+    /**
+     * Обработкса события
+     *
+     * @param event - событие
+     * @return \yii\db\ActiveQuery
+     */
     public function fire_event($event) {
         $params_array = [];
         if ($this->params) {
@@ -78,8 +84,8 @@ class EventHandler extends \yii\db\ActiveRecord
                 }
             }
         }
-        $params_array['chunks'] = Chunk::getChunks();
-        $loader = new \Twig_Loader_Filesystem('/');
+        $params_array['chunks'] = Chunk::getChunks();  // получение глобальных параметров сайта
+        $loader = new \Twig_Loader_Filesystem('/'); //для парсинга шаблонов используется шаблонизатор Twig
         $twig = new \Twig_Environment($loader);
         $twig->addExtension(new Extension());
         $tmp = $twig->createTemplate($this->template);
@@ -104,6 +110,13 @@ class EventHandler extends \yii\db\ActiveRecord
         $transport->send($recipients, $this->title, $msg);
     }
 
+    /**
+     * Перегрузка Model:: load() добавлен парсинг дополнительных параметров
+     * шаблона оповещения, которые добавляются с помощью jQuery
+     *
+     * @param event - событие
+     * @return \yii\db\ActiveQuery
+     */
     public function load($data, $formName = null) {
         $params =[];
         foreach($data as $key=>$value) {

@@ -15,13 +15,13 @@ class m160513_201923_create_user_table extends Migration
     {
         $this->createTable('user', [
             'id' => $this->primaryKey(),
-            'name' => Schema::TYPE_STRING . 'NOT NULL',
-            'password_hash' => Schema::TYPE_SMALLINT . 'NOT NULL',
-            'email' => Schema::TYPE_STRING . 'NOT NULL',
-            'role' => Schema::TYPE_INTEGER . 'NOT NULL',
-            'status' => Schema::TYPE_INTEGER . 'NOT NULL',
-            'created_at' => Schema::TYPE_INTEGER . 'NOT NULL',
-            'updated_at' => Schema::TYPE_INTEGER . 'NOT NULL'
+            'name' => Schema::TYPE_STRING . ' NOT NULL',
+            'password_hash' => Schema::TYPE_STRING . ' NOT NULL',
+            'email' => Schema::TYPE_STRING . ' NOT NULL',
+            'role' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'status' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'created_at' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'updated_at' => Schema::TYPE_INTEGER . ' NOT NULL'
         ]);
     }
 

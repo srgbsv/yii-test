@@ -1,6 +1,15 @@
 <?php
 namespace app\components;
 
+/**
+ * Переопределение класса yii\filters\AccessRule для поддержки ролей
+ *
+ * @todo Можно использовать RBAC
+ *
+ * @author Sergey Bosov <srg.bsv@gmail.com>
+ *
+ */
+
 
 class AccessRule extends \yii\filters\AccessRule
 {

@@ -2,17 +2,30 @@
 
 namespace app\components\Eventable;
 
+/**
+ * Поведение, которое должна использовать моделять, использующая события
+ *
+ * @author Sergey Bosov <srg.bsv@gmail.com>
+ *
+ */
+
 use Yii;
 use app\components\Transport;
 use app\models\EventHandler;
-use yii\base\Behavior;
 
 trait EventableTrait
 {
 	public function init() {
+		parent::init();
 		$this->registerEvents();
 	}
 
+	/**
+	 * Функция запускается при инициализации объекта и регистрирует все события, которые
+	 * есть в БД для данной модели
+	 *
+	 * @return mixed
+	 */
 	public function registerEvents() {
 		$events = self::getEvents();
 		foreach($events as $event) {

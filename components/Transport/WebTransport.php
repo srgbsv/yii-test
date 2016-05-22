@@ -2,6 +2,13 @@
 
 namespace app\components\Transport;
 
+/**
+ * Класс-web транспорта. Используется для отсылки уведомлений в Web
+ *
+ * @author Sergey Bosov <srg.bsv@gmail.com>
+ *
+ */
+
 use app\components\Transport\TransportableInterface;
 use app\models\Notification;
 
